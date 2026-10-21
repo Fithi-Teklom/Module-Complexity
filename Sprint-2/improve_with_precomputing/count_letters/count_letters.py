@@ -13,3 +13,8 @@ def count_letters(s: str) -> int:
 
 def is_upper_case(letter: str) -> bool:
     return letter == letter.upper()
+
+# 
+# The original code searches the string repeatedly, giving it (O(n^2)) time complexity.
+# The new version stores lowercase letters in a set first, so it can check them faster.
+# This reduces the expected time complexity to (O(n)), but uses extra memory.
