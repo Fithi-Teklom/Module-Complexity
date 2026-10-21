@@ -1,12 +1,16 @@
 from typing import List
 cache = {}
-all_coins = [200, 100, 50, 20, 10, 5, 2, 1]
-coin_lists = [all_coins[i:] for i in range(len(all_coins) + 1)]
-
-coin_list_ids = {
-    tuple(coins): index
-    for index, coins in enumerate(coin_lists)
-}
+coin_lists = [
+    [200, 100, 50, 20, 10, 5, 2, 1],  # ID 0
+    [100, 50, 20, 10, 5, 2, 1],       # ID 1
+    [50, 20, 10, 5, 2, 1],            # ID 2
+    [20, 10, 5, 2, 1],                # ID 3
+    [10, 5, 2, 1],                    # ID 4
+    [5, 2, 1],                        # ID 5
+    [2, 1],                           # ID 6
+    [1],                              # ID 7
+    []                                # ID 8
+]
 
 def ways_to_make_change(total: int) -> int:
     """
@@ -41,8 +45,13 @@ def ways_to_make_change_helper(total: int,  coin_list_id: int) -> int:
             if total_from_coins == total:
                 ways += 1
             else:
-                intermediate = ways_to_make_change_helper(total - total_from_coins, coin_list_id + coin_index+1)
-                ways += intermediate
+               next_coin_list_id = coin_list_id + coin_index + 1
+               intermediate = ways_to_make_change_helper(
+                    total - total_from_coins,
+                    next_coin_list_id
+                )
+               ways += intermediate
+
             count_of_coin += 1
     cache[key] = ways
     return ways
