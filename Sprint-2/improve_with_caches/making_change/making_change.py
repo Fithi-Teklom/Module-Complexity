@@ -1,16 +1,6 @@
 from typing import List
 cache = {}
-coin_lists = [
-    [200, 100, 50, 20, 10, 5, 2, 1],  # ID 0
-    [100, 50, 20, 10, 5, 2, 1],       # ID 1
-    [50, 20, 10, 5, 2, 1],            # ID 2
-    [20, 10, 5, 2, 1],                # ID 3
-    [10, 5, 2, 1],                    # ID 4
-    [5, 2, 1],                        # ID 5
-    [2, 1],                           # ID 6
-    [1],                              # ID 7
-    []                                # ID 8
-]
+all_coins = [200, 100, 50, 20, 10, 5, 2, 1]
 
 def ways_to_make_change(total: int) -> int:
     """
@@ -20,12 +10,11 @@ def ways_to_make_change(total: int) -> int:
     """
     return ways_to_make_change_helper(total, 0)
 
-def ways_to_make_change_helper(total: int,  coin_list_id: int) -> int:
+def ways_to_make_change_helper(total: int,  start_index: int) -> int:
     """
     Helper function for ways_to_make_change to avoid exposing the coins parameter to callers.
     """
-    coins = coin_lists[coin_list_id]
-    key = (total, coin_list_id)
+    key = (total, start_index)
 
     if key in cache:
         return cache[key]
@@ -33,22 +22,21 @@ def ways_to_make_change_helper(total: int,  coin_list_id: int) -> int:
     if total == 0:
         return 1
 
-    if len(coins) == 0:
+    if start_index >= len(all_coins):
         return 0
     
     ways = 0
-    for coin_index in range(len(coins)):
-        coin = coins[coin_index]
+    for coin_index in range(start_index, len(all_coins)):
+        coin = all_coins[coin_index]
         count_of_coin = 1
         while coin * count_of_coin <= total:
             total_from_coins = coin * count_of_coin
             if total_from_coins == total:
                 ways += 1
             else:
-               next_coin_list_id = coin_list_id + coin_index + 1
                intermediate = ways_to_make_change_helper(
                     total - total_from_coins,
-                    next_coin_list_id
+                    coin_index + 1
                 )
                ways += intermediate
 
